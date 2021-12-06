@@ -14,3 +14,5 @@ Escolha um notebook para traduzir que não foi traduzido ainda, copie seu URL e 
 
 Depois de fazer a tradução, salve seu notebook do Google Colab no seu fork do repositório de traduções no GitHub e abra um Pull Request. 
 
+Após a lista de Autores, adicione uma seção Tradução com seu nome. Veja o exemplo em plot-catalog.ipynb
+
