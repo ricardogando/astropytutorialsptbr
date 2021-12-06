@@ -8,9 +8,9 @@ Como contribuir:
 
 Faça um fork desse repositório.
 
-Escolha um notebook para traduzir, copie seu endereço e abra diretamente no Google Colab assim:
+Escolha um notebook para traduzir que não foi traduzido ainda, copie seu URL e abra diretamente no Google Colab assim:
 
 ![image](https://user-images.githubusercontent.com/8430139/144924872-9c272c07-d0a1-4c73-bda7-e1915f087dfc.png)
 
-Depois de fazer a tradução, salve no seu fork do repositório de traduções e abra um Pull Request. 
+Depois de fazer a tradução, salve seu notebook do Google Colab no seu fork do repositório de traduções no GitHub e abra um Pull Request. 
 
