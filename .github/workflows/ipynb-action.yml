@@ -1,29 +1,51 @@
-name: Test-Notebooks
-
-# Run every time a new commit is pushed
-on: push
+name: Build tutorials (pull requests)
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      # We also want this workflow triggered if the 'Run all tutorials' label
+      # is added or present when PR is updated
+      - opened
+      - reopened
+      - synchronize
+      - labeled
 
 jobs:
-  # Set the job key
-  test-notebooks:
-    # Name the job
-    name: Test Jupyter Notebooks
-    # Set the type of machine to run on
+  notebooks:
+    name: "Execute and convert the notebooks to HTML"
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install conda environment
-        uses: conda-incubator/setup-miniconda@v1
+      - uses: actions/checkout@v2
         with:
-          activate-environment: jupyter-actions
-          environment-file: environment.yml
-          python-version: 3.7
+          fetch-depth: 0
 
-      - name: Execute all Notebooks
-        shell: bash -l {0}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
         run: |
-          conda activate jupyter-actions
-          pytest
+          sudo apt-get install pandoc
+          python -m pip install -U pip
+          python -m pip install -r requirements.txt
+          python -m pip install gitpython
+          python -m pip install git+https://github.com/astropy/nbcollection
+
+      # Run all tutorials if the label is present
+      - name: Run all tutorials
+        if: contains(github.event.pull_request.labels.*.name, 'Run all tutorials')
+        run: |
+          export TUTORIALS_MAIN_BRANCH=origin/main
+          make executeall
+          make convertall
+
+      # Otherwise, only run tutorials that have been modified
+      - name: Run only modified tutorials
+        if: "!contains(github.event.pull_request.labels.*.name, 'Run all tutorials')"
+        run: |
+          export TUTORIALS_MAIN_BRANCH=origin/main
+          make execute
+          make convert
+          
